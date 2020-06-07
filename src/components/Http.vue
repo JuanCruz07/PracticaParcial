@@ -21,10 +21,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(usuario, index) in usuarios" :key="index">
-            <td scope="row">{{ usuario.id }}</td>
-            <td>{{usuario.nombre}}</td>
-            <td>{{usuario.apellido}}</td>
+          <tr v-for="(usuario, index) in this.$store.state.usuarios" :key="index">
+            <td scope="row">{{ usuario.id}}</td>
+            <td>{{usuario.nombre | pasarMinuscula | pasarPrimerLetraMayus}}</td>
+            <td>{{usuario.apellido | pasarMinuscula | pasarPrimerLetraMayus}}</td>
             <td>{{usuario.edad}}</td>
             <td>{{usuario.email}}</td>
             <td> <button class="btn btn-danger" @click="borrar(usuario.id)">X</button> </td>
@@ -56,9 +56,7 @@
     },
     data () {
       return {
-        usuarios : [],
         hayUsuarios: 0       
-
       }
     },
     methods: {
@@ -66,8 +64,8 @@
         this.axios.get(urlUsuarios)
         .then( res => {
           console.log(res.data)
-          this.usuarios = res.data
-          if(this.usuarios.length != 0){
+          this.$store.dispatch('getUsuarios', res.data)
+          if(this.$store.state.usuarios != 0){
             this.hayUsuarios = 1  
           }else{
             this.hayUsuarios = 2
@@ -81,10 +79,9 @@
       borrar(id) {
         this.axios.delete(urlUsuarios+id)
         .then( res => {
-          console.log(res.data)          
-          let offset = this.usuarios.findIndex(usuario => usuario.id == id)
-          this.usuarios.splice(offset, 1)
-          if(this.usuarios.length==0){
+          console.log(res)
+          this.$store.dispatch('borrarUsuarios', id)
+          if(this.$store.state.usuarios == 0){
             this.hayUsuarios = 2
           }
         })
