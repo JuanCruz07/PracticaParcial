@@ -16,14 +16,16 @@
             </li>
             <li class="nav-item">
               <router-link to="/usuarios" tag="li">
-                <a class="nav-link" href="#">Usuarios</a>
+                <a class="nav-link" href="#">HTTP</a>
               </router-link>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link">CANT USERS: {{ mostrarCantUsuarios }}</a>
             </li>
           </ul>
         </div>
       </nav>
     </div>
-    
   </section>
 
 </template>
@@ -33,9 +35,6 @@
   export default  {
     name: 'src-components-nav-bar',
     props: [],
-    mounted () {
-
-    },
     data () {
       return {
 

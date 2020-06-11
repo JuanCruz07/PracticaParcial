@@ -13,6 +13,7 @@
             id="nombre"
             name="nombre"
             autocomplete="off"
+            no-espacios
             v-model.trim="formData.nombre"
             :maxlength="nombreChrMax"
             :minlength="nombreChrMin"
@@ -20,10 +21,11 @@
           />
 
           <field-messages name="nombre" show="$dirty">
-            <!-- <div class="alert alert-success my-1">Campo correcto</div> -->
-            <div slot="required" class="alert alert-danger my-1">Campo nombre requerido</div>            
+            <div slot="required" class="alert alert-danger my-1">Campo nombre requerido</div>          
             <div slot="minlength" class="alert alert-danger my-1">Se deben ingresar como mínimo {{nombreChrMin}} caracteres</div>
+            <div slot="no-espacios" class="alert alert-danger my-1">No tiene que tener espacios</div>
             <div v-if="formData.nombre.length == nombreChrMax" class="alert alert-danger my-1">Máximo de caracteres alcanzados ({{nombreChrMax}})</div>
+            <div class="alert alert-success my-1">Campo correcto</div>
           </field-messages>
         </validate>
 
@@ -84,6 +86,27 @@
           </field-messages>
         </validate>
 
+        <validate tag="div">
+          <label for="telefono" class="mt-3">Teléfono</label>
+          <input
+            type="text"
+            class="form-control"
+            id="telefono"
+            name="telefono"
+            autocomplete="off"
+            v-model.trim="formData.telefono"
+            :minlength="telefonoChar"
+            required
+          />
+
+          <field-messages name="telefono" show="$dirty">
+            <div slot="required" class="alert alert-danger my-1">Campo Teléfono requerido. Ingrese {{telefonoChar}} numeros</div>
+            <div slot="minlength" class="alert alert-danger my-1">Teléfono no válido. Usted ingreso menos de {{telefonoChar}} números</div>           
+            <div v-if="formData.telefono.length != telefonoChar" class="alert alert-danger my-1">Teléfono no válido. Usted ingreso más de {{telefonoChar}} números</div>
+          </field-messages>
+
+        </validate>
+
       <br>
 
 
@@ -111,8 +134,8 @@
         nombreChrMin: 5,
         nombreChrMax: 15,
         edadMin: 18,
-        edadMax: 120
-
+        edadMax: 120,
+        telefonoChar: 10
       }
     },
     methods: {
@@ -121,8 +144,10 @@
           nombre: '',
           apellido: '',
           edad: '',
-          email: ''
+          email: '',
+          telefono: ''
         }
+      
       },
 
       enviar() {
@@ -134,6 +159,7 @@
           console.log(res.data)
           this.formData = this.getDatosIniciales()
           this.formState._reset()
+          this.$store.dispatch('postUsuario', this.formData)
         })
         .catch(error => {
           console.log('ERROR POST', error)

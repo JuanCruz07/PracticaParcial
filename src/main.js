@@ -10,6 +10,7 @@ import 'jquery'
 import './forms'
 import './httpClient'
 import './filters'
+import './mixins/mixinsGlobales'
 
 
 Vue.config.productionTip = false
